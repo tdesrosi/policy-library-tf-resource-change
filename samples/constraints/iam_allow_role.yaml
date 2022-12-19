@@ -1,4 +1,4 @@
-# Copyright 2022 Google LLC
+# Copyright 2022 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,17 +11,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPIAMCustomRolePermissionsConstraintV1
+
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: TFGCPIAMAllowBanRolesConstraintV1
 metadata:
-  name: allowlist-custom-role-permissions
-  annotations:
-    description: Custom roles must only have specific permissions
+  name: iam-allow-roles
 spec:
   severity: high
+  match:
+    target: # {"$ref":"#/definitions/io.k8s.cli.setters.target"}
+      - "organizations/**"
+    exclude: [] # optional, default is no exclusions
   parameters:
-    mode: allowlist
-    permissions:
-      - "bigquery.datasets.get"
-      - "bigquery.tables.*"
+    mode: "allow"
+    roles:
+      - "roles/logging.viewer"
+      - "roles/resourcemanager.projectIamAdmin"
+      - "roles/**"

@@ -12,23 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# This constraint checks that all IAM policy members are in the
-# "gserviceaccount.com" domain.
-apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPIAMAllowedPolicyMemberDomainsConstraintV2
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: TFGCPIAMAllowedBindingsConstraintV3
 metadata:
-  name: service_accounts_only
-  annotations:
-    description:
-      Checks that members that have been granted IAM roles belong to allowlisted
-      domains.
+  name: deny-cicdsa
 spec:
   severity: high
   match:
     ancestries: # {"$ref":"#/definitions/io.k8s.cli.setters.target"}
       - "organizations/**"
+    exclude: [] # optional, default is no exclusions
   parameters:
-    domains:
-      - gserviceaccount.com
-      - google.com
-      - arborist.joonix.net
+    mode: allowlist
+    role: roles/resourcemanager.projectIamAdmin
+    members:
+      - "user:bad@notgood.com"
+      - "user:thomas@arborist.joonix.net"
+# This will allow bad@notgood.com because it's only targeting
+# resourcemanager.projectIamAdmin role. Keep this in mind when designing
+# your own policies

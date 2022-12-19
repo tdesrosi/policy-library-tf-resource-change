@@ -43,29 +43,20 @@ violation[{
 	params := input.parameters
 
 	# Use input.review for TF changes (see schema above)
-	resource := input.review[_]
+	resource := input.review
 
 	resource.type == "google_project_iam_binding"
 	not resource.change.actions[0] == "delete"
 
-	# Unused, for reference only.
-	# check_asset_type(review, params)
-
-	# # Check if resource is part of asset names to scan
-	# include_list := lib.get_default(params, "assetNames", [])
-	# is_included(include_list, resource.name)
+	# Get mode from params
+	mode := object.get(params, "mode", "allowlist")
 
 	# Gather role and member for TF
 	role := resource.change.after.role
 	member := resource.change.after.members[_]
 
-	# Match roles between resource changes and params, we'll see what members
+	# Match roles between resource change and params
 	glob.match(params.role, ["/"], role)
-
-	# params.role == role
-
-	# Get mode from params
-	mode := object.get(params, "mode", "allowlist")
 
 	# Grab matches found using set arithmetic
 	matches_found = [m | m = config_pattern(params.members[_]); glob.match(m, [], member)]
@@ -93,26 +84,6 @@ target_match_count(mode) = 0 {
 target_match_count(mode) = 1 {
 	mode == "allowlist"
 }
-
-# Unused, for reference only.
-# check_asset_type(resource, params) {
-# 	lib.has_field(params, "assetType")
-# 	params.assetType == resource.type
-# }
-
-# check_asset_type(resource, params) {
-# 	lib.has_field(params, "assetType") == false
-# }
-
-# Unused, for reference only.
-# is_included(include_list, asset_name) {
-# 	include_list != []
-# 	glob.match(include_list[_], ["/"], asset_name)
-# }
-
-# is_included(include_list, asset_name) {
-# 	include_list == []
-# }
 
 # If the member in constraint is written as a single "*", turn it into super
 # glob "**". Otherwise, we won't be able to match everything.

@@ -98,7 +98,7 @@ spec:
         	params := input.parameters
         
         	# Use input.review for TF changes (see schema above)
-        	resource := input.review[_]
+        	resource := input.review
         
         	resource.type == "google_project_iam_binding"
         	not resource.change.actions[0] == "delete"
@@ -112,33 +112,28 @@ spec:
         
         	allow_sub_domains := object.get(params, "allow_sub_domains", true)
         
-        	no_match_found := matched_domains(allow_sub_domains, params.domains, member)
-        
-        	no_match_found == 0
+        	no_match(allow_sub_domains, params.domains, member)
         
         	message := sprintf("IAM policy for %v contains member from unexpected domain: %v", [resource.name, member])
-        
-        	# trace(sprintf("message (msg): %v", [message]))
         
         	metadata := {
         		"resource": resource.name,
         		"member": member,
         		"tf_address": resource.address,
         	}
-        	# trace(sprintf("Metadata: %v", [metadata]))
         }
         
-        # Returns count of matched domains between constraint params and members
-        matched_domains(allow_sub_domains, domains, member) = matched_domains_count {
+        # Matches domains/subdomains based on regex
+        no_match(allow_sub_domains, domains, member) {
         	allow_sub_domains == true
-        	matched_domains := [m | m = member; regex.match(sprintf("[:@.]%v$", [domains[_]]), member)]
-        	matched_domains_count := count(matched_domains)
+        	matched_domains := [m | m = member; re_match(sprintf("[:@.]%v$", [domains[_]]), member)]
+        	count(matched_domains) == 0
         }
         
-        matched_domains(allow_sub_domains, domains, member) = matched_domains_count {
+        no_match(allow_sub_domains, domains, member) {
         	allow_sub_domains == false
-        	matched_domains := [m | m = member; regex.match(sprintf("[:@]%v$", [domains[_]]), member)]
-        	matched_domains_count := count(matched_domains)
+        	matched_domains := [m | m = member; re_match(sprintf("[:@]%v$", [domains[_]]), member)]
+        	count(matched_domains) == 0
         }
         
         # Determines if the member starts with allowlisted type of member (optional param)
