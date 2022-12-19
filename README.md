@@ -1,4 +1,4 @@
-# Config Validator Policy Library
+# Terraform Config Validator Policy Library
 
 This repo contains a library of constraint templates and sample constraints to be used for Terraform resource change requests. If you're looking for the CAI variant, please see [Config Validator](https://github.com/lykaasegura/w-secteam-repo).
 
