@@ -5,28 +5,45 @@
         "root_module": {
             "resources": [
                 {
-                    "address": "google_project_iam_custom_role.my-custom-role",
+                    "address": "google_project_iam_binding.projectIamAdmin",
                     "mode": "managed",
-                    "type": "google_project_iam_custom_role",
-                    "name": "my-custom-role",
+                    "type": "google_project_iam_binding",
+                    "name": "projectIamAdmin",
                     "provider_name": "registry.terraform.io/hashicorp/google",
                     "schema_version": 0,
                     "values": {
-                        "description": "A description sfdafsda",
-                        "permissions": [
-                            "iam.roles.create",
-                            "iam.roles.delete",
-                            "iam.roles.list"
+                        "condition": [],
+                        "members": [
+                            "user:thomas@arborist.joonix.net"
                         ],
                         "project": "w-secteam-target-prod",
-                        "role_id": "myCustomRole4",
-                        "stage": "GA",
-                        "title": "My Custom Role 4"
+                        "role": "roles/resourcemanager.projectIamAdmin"
                     },
                     "sensitive_values": {
-                        "permissions": [
-                            false,
-                            false,
+                        "condition": [],
+                        "members": [
+                            false
+                        ]
+                    }
+                },
+                {
+                    "address": "google_project_iam_binding.projectIamAdminBad",
+                    "mode": "managed",
+                    "type": "google_project_iam_binding",
+                    "name": "projectIamAdminBad",
+                    "provider_name": "registry.terraform.io/hashicorp/google",
+                    "schema_version": 0,
+                    "values": {
+                        "condition": [],
+                        "members": [
+                            "user:bad@notgood.com"
+                        ],
+                        "project": "w-secteam-target-prod",
+                        "role": "roles/logging.viewer"
+                    },
+                    "sensitive_values": {
+                        "condition": [],
+                        "members": [
                             false
                         ]
                     }
@@ -40,48 +57,12 @@
                     "schema_version": 0,
                     "values": {
                         "condition": [],
-                        "member": "serviceAccount:prod-env@w-secteam-app-pipeline.iam.gserviceaccount.com",
+                        "member": "serviceAccount:bad-prod-env@w-secteam-app-pipeline.iam.gserviceaccount.com",
                         "project": "w-secteam-target-prod",
                         "role": "roles/storage.admin"
                     },
                     "sensitive_values": {
                         "condition": []
-                    }
-                },
-                {
-                    "address": "google_storage_bucket.test-storage-bucket",
-                    "mode": "managed",
-                    "type": "google_storage_bucket",
-                    "name": "test-storage-bucket",
-                    "provider_name": "registry.terraform.io/hashicorp/google",
-                    "schema_version": 0,
-                    "values": {
-                        "cors": [],
-                        "custom_placement_config": [],
-                        "default_event_based_hold": null,
-                        "encryption": [],
-                        "force_destroy": true,
-                        "labels": null,
-                        "lifecycle_rule": [],
-                        "location": "US",
-                        "logging": [],
-                        "name": "w-test-storage-prd-demo-0823",
-                        "project": "w-secteam-target-prod",
-                        "requester_pays": null,
-                        "retention_policy": [],
-                        "storage_class": "STANDARD",
-                        "timeouts": null,
-                        "website": []
-                    },
-                    "sensitive_values": {
-                        "cors": [],
-                        "custom_placement_config": [],
-                        "encryption": [],
-                        "lifecycle_rule": [],
-                        "logging": [],
-                        "retention_policy": [],
-                        "versioning": [],
-                        "website": []
                     }
                 }
             ]
@@ -89,10 +70,10 @@
     },
     "resource_changes": [
         {
-            "address": "google_project_iam_custom_role.my-custom-role",
+            "address": "google_project_iam_binding.projectIamAdmin",
             "mode": "managed",
-            "type": "google_project_iam_custom_role",
-            "name": "my-custom-role",
+            "type": "google_project_iam_binding",
+            "name": "projectIamAdmin",
             "provider_name": "registry.terraform.io/hashicorp/google",
             "change": {
                 "actions": [
@@ -100,32 +81,61 @@
                 ],
                 "before": null,
                 "after": {
-                    "description": "A description sfdafsda",
-                    "permissions": [
-                        "iam.roles.create",
-                        "iam.roles.delete",
-                        "iam.roles.list"
+                    "condition": [],
+                    "members": [
+                        "user:thomas@arborist.joonix.net"
                     ],
                     "project": "w-secteam-target-prod",
-                    "role_id": "myCustomRole4",
-                    "stage": "GA",
-                    "title": "My Custom Role 4"
+                    "role": "roles/resourcemanager.projectIamAdmin"
                 },
                 "after_unknown": {
-                    "deleted": true,
+                    "condition": [],
+                    "etag": true,
                     "id": true,
-                    "name": true,
-                    "permissions": [
-                        false,
-                        false,
+                    "members": [
                         false
                     ]
                 },
                 "before_sensitive": false,
                 "after_sensitive": {
-                    "permissions": [
-                        false,
-                        false,
+                    "condition": [],
+                    "members": [
+                        false
+                    ]
+                }
+            }
+        },
+        {
+            "address": "google_project_iam_binding.projectIamAdminBad",
+            "mode": "managed",
+            "type": "google_project_iam_binding",
+            "name": "projectIamAdminBad",
+            "provider_name": "registry.terraform.io/hashicorp/google",
+            "change": {
+                "actions": [
+                    "create"
+                ],
+                "before": null,
+                "after": {
+                    "condition": [],
+                    "members": [
+                        "user:bad@notgood.com"
+                    ],
+                    "project": "w-secteam-target-prod",
+                    "role": "roles/logging.viewer"
+                },
+                "after_unknown": {
+                    "condition": [],
+                    "etag": true,
+                    "id": true,
+                    "members": [
+                        false
+                    ]
+                },
+                "before_sensitive": false,
+                "after_sensitive": {
+                    "condition": [],
+                    "members": [
                         false
                     ]
                 }
@@ -144,7 +154,7 @@
                 "before": null,
                 "after": {
                     "condition": [],
-                    "member": "serviceAccount:prod-env@w-secteam-app-pipeline.iam.gserviceaccount.com",
+                    "member": "serviceAccount:bad-prod-env@w-secteam-app-pipeline.iam.gserviceaccount.com",
                     "project": "w-secteam-target-prod",
                     "role": "roles/storage.admin"
                 },
@@ -156,63 +166,6 @@
                 "before_sensitive": false,
                 "after_sensitive": {
                     "condition": []
-                }
-            }
-        },
-        {
-            "address": "google_storage_bucket.test-storage-bucket",
-            "mode": "managed",
-            "type": "google_storage_bucket",
-            "name": "test-storage-bucket",
-            "provider_name": "registry.terraform.io/hashicorp/google",
-            "change": {
-                "actions": [
-                    "create"
-                ],
-                "before": null,
-                "after": {
-                    "cors": [],
-                    "custom_placement_config": [],
-                    "default_event_based_hold": null,
-                    "encryption": [],
-                    "force_destroy": true,
-                    "labels": null,
-                    "lifecycle_rule": [],
-                    "location": "US",
-                    "logging": [],
-                    "name": "w-test-storage-prd-demo-0823",
-                    "project": "w-secteam-target-prod",
-                    "requester_pays": null,
-                    "retention_policy": [],
-                    "storage_class": "STANDARD",
-                    "timeouts": null,
-                    "website": []
-                },
-                "after_unknown": {
-                    "cors": [],
-                    "custom_placement_config": [],
-                    "encryption": [],
-                    "id": true,
-                    "lifecycle_rule": [],
-                    "logging": [],
-                    "public_access_prevention": true,
-                    "retention_policy": [],
-                    "self_link": true,
-                    "uniform_bucket_level_access": true,
-                    "url": true,
-                    "versioning": true,
-                    "website": []
-                },
-                "before_sensitive": false,
-                "after_sensitive": {
-                    "cors": [],
-                    "custom_placement_config": [],
-                    "encryption": [],
-                    "lifecycle_rule": [],
-                    "logging": [],
-                    "retention_policy": [],
-                    "versioning": [],
-                    "website": []
                 }
             }
         }
@@ -227,30 +180,43 @@
         "root_module": {
             "resources": [
                 {
-                    "address": "google_project_iam_custom_role.my-custom-role",
+                    "address": "google_project_iam_binding.projectIamAdmin",
                     "mode": "managed",
-                    "type": "google_project_iam_custom_role",
-                    "name": "my-custom-role",
+                    "type": "google_project_iam_binding",
+                    "name": "projectIamAdmin",
                     "provider_config_key": "google",
                     "expressions": {
-                        "description": {
-                            "constant_value": "A description sfdafsda"
-                        },
-                        "permissions": {
+                        "members": {
                             "constant_value": [
-                                "iam.roles.list",
-                                "iam.roles.create",
-                                "iam.roles.delete"
+                                "user:thomas@arborist.joonix.net"
                             ]
                         },
                         "project": {
                             "constant_value": "w-secteam-target-prod"
                         },
-                        "role_id": {
-                            "constant_value": "myCustomRole4"
+                        "role": {
+                            "constant_value": "roles/resourcemanager.projectIamAdmin"
+                        }
+                    },
+                    "schema_version": 0
+                },
+                {
+                    "address": "google_project_iam_binding.projectIamAdminBad",
+                    "mode": "managed",
+                    "type": "google_project_iam_binding",
+                    "name": "projectIamAdminBad",
+                    "provider_config_key": "google",
+                    "expressions": {
+                        "members": {
+                            "constant_value": [
+                                "user:bad@notgood.com"
+                            ]
                         },
-                        "title": {
-                            "constant_value": "My Custom Role 4"
+                        "project": {
+                            "constant_value": "w-secteam-target-prod"
+                        },
+                        "role": {
+                            "constant_value": "roles/logging.viewer"
                         }
                     },
                     "schema_version": 0
@@ -263,35 +229,13 @@
                     "provider_config_key": "google",
                     "expressions": {
                         "member": {
-                            "constant_value": "serviceAccount:prod-env@w-secteam-app-pipeline.iam.gserviceaccount.com"
+                            "constant_value": "serviceAccount:bad-prod-env@w-secteam-app-pipeline.iam.gserviceaccount.com"
                         },
                         "project": {
                             "constant_value": "w-secteam-target-prod"
                         },
                         "role": {
                             "constant_value": "roles/storage.admin"
-                        }
-                    },
-                    "schema_version": 0
-                },
-                {
-                    "address": "google_storage_bucket.test-storage-bucket",
-                    "mode": "managed",
-                    "type": "google_storage_bucket",
-                    "name": "test-storage-bucket",
-                    "provider_config_key": "google",
-                    "expressions": {
-                        "force_destroy": {
-                            "constant_value": true
-                        },
-                        "location": {
-                            "constant_value": "US"
-                        },
-                        "name": {
-                            "constant_value": "w-test-storage-prd-demo-0823"
-                        },
-                        "project": {
-                            "constant_value": "w-secteam-target-prod"
                         }
                     },
                     "schema_version": 0

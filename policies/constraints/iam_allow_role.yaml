@@ -25,7 +25,5 @@ spec:
   parameters:
     mode: "ban"
     roles:
-      - "roles/appengine.appViewer"
       - "roles/logging.viewer"
-      - "roles/*"
-      - "w-secteam-target-prod/roles/myCustomRole"
+      - "roles/resourcemanager.projectIamAdmin"

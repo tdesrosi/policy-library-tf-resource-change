@@ -44,14 +44,10 @@ violation[{
 	# Outdated Gatekeeper format, updating to v1beta1
 	params := input.parameters
 
-	# trace(sprintf("params of custom role permissions: %v", [params]))
-
 	# Use input.review for TF changes (see schema above)
 	resource := input.review
 	resource.type == "google_project_iam_custom_role"
 	not resource.change.actions[0] == "delete"
-
-	# trace(sprintf("input object for custom role permissions: %v", [input]))
 
 	# Permissions attempting to be granted (see schema above)
 	asset_permissions := resource.change.after.permissions[_]
