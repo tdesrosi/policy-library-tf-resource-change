@@ -23,8 +23,7 @@ spec:
       - "organizations/**"
     exclude: [] # optional, default is no exclusions
   parameters:
-    mode: "allow"
+    mode: "denylist"
     roles:
       - "roles/logging.viewer"
       - "roles/resourcemanager.projectIamAdmin"
-      - "roles/**"

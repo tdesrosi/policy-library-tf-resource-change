@@ -27,7 +27,7 @@ spec:
             mode:
               description: "Enforcement mode, defaults to allow"
               type: string
-              enum: [ban, allow]
+              enum: [denylist, allowlist]
             roles:
               description: "Roles to be allowed or banned
                 ex. roles/owner; Wildcards (*) supported"
@@ -91,7 +91,7 @@ spec:
         
         	matches_found = {r | r := role; glob.match(params.roles[_], [], r)}
         
-        	mode := object.get(params, "mode", "allow")
+        	mode := object.get(params, "mode", "allowlist")
         
         	target_match_count(mode, desired_count)
         	count(matches_found) != desired_count
@@ -110,11 +110,11 @@ spec:
         
         # Determine the overlap between matches under test and constraint
         target_match_count(mode) = 0 {
-        	mode == "ban"
+        	mode == "denylist"
         }
         
         target_match_count(mode) = 1 {
-        	mode == "allow"
+        	mode == "allowlist"
         }
         
         # Output message based on type of violation

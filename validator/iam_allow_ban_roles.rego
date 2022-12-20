@@ -51,7 +51,7 @@ violation[{
 
 	matches_found = {r | r := role; glob.match(params.roles[_], [], r)}
 
-	mode := object.get(params, "mode", "allow")
+	mode := object.get(params, "mode", "allowlist")
 
 	target_match_count(mode, desired_count)
 	count(matches_found) != desired_count
@@ -70,11 +70,11 @@ violation[{
 
 # Determine the overlap between matches under test and constraint
 target_match_count(mode) = 0 {
-	mode == "ban"
+	mode == "denylist"
 }
 
 target_match_count(mode) = 1 {
-	mode == "allow"
+	mode == "allowlist"
 }
 
 # Output message based on type of violation
