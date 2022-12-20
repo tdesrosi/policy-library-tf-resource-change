@@ -16,10 +16,16 @@ apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: TFGCPIAMCustomRolePermissionsConstraintV1
 metadata:
   name: allowlist-custom-role-permissions
+  annotations:
+    description: Use to allowlist (allow ONLY the following permissions for all
+      custom roles) or denylist (don't allow any of the listed permissions, all
+      else passes) custom role permissions. Template supports wildcards at each
+      level of the permission spec.
 spec:
   severity: high
   parameters:
     mode: allowlist
+    # title: Optional param. Use to apply rule only to identified custom role.
     permissions:
       - "bigquery.datasets.get"
       - "bigquery.tables.*"

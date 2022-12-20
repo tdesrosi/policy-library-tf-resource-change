@@ -16,6 +16,8 @@ apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: TFGCPIAMAllowedBindingsConstraintV3
 metadata:
   name: deny-cicdsa
+  annotations:
+    description: Prevent additional role grants to cicd service accounts
 spec:
   severity: high
   match:
@@ -23,11 +25,14 @@ spec:
       - "organizations/**"
     exclude: [] # optional, default is no exclusions
   parameters:
-    mode: allowlist
-    role: roles/resourcemanager.projectIamAdmin
+    mode: denylist
+    role: roles/*
     members:
-      - "user:bad@notgood.com"
-      - "user:thomas@arborist.joonix.net"
-# This will allow bad@notgood.com because it's only targeting
-# resourcemanager.projectIamAdmin role. Keep this in mind when designing
-# your own policies
+      - "serviceAccount:sample-dev-cicd-sa@w-secteam-target-prod.iam.gserviceaccount.com"
+      - "serviceAccount:sample-prod-cicd-sa@w-secteam-target-prod.iam.gserviceaccount.com"
+#
+# NOTE:
+# This policy uses allowed bindings constraint, which is designed to filter
+# roles first. If there's a member in your list not being provisioned a listed
+# role, it will pass. Use allow_ban_roles to allowlist/denylist roles for all
+# members.

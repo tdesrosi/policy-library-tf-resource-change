@@ -16,6 +16,9 @@ apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: TFGCPIAMAllowBanRolesConstraintV1
 metadata:
   name: iam-allow-roles
+  annotations:
+    description: Allow only the listed IAM role bindings to be created. This
+      constraint is member-agnostic.
 spec:
   severity: high
   match:
@@ -23,7 +26,7 @@ spec:
       - "organizations/**"
     exclude: [] # optional, default is no exclusions
   parameters:
-    mode: "denylist"
+    mode: "allowlist"
     roles:
       - "roles/logging.viewer"
       - "roles/resourcemanager.projectIamAdmin"
