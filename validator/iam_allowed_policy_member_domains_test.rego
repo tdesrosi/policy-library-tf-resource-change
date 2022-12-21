@@ -16,7 +16,7 @@
 
 package templates.gcp.TFGCPIAMAllowedPolicyMemberDomainsConstraintV2
 
-import data.test.fixtures.iam_allowed_policy_member_domains.assets as fixture_assets
+import data.test.fixtures.iam_allowed_policy_member_domains.assets.resource_changes as fixture_assets
 import data.test.fixtures.iam_allowed_policy_member_domains.constraints as fixture_constraints
 
 # Find all violations on our test cases

@@ -22,7 +22,7 @@ template_name := "TFGCPIAMAllowedBindingsConstraintV3"
 
 import data.validator.test_utils as test_utils
 
-import data.test.fixtures.iam_allowed_bindings.assets as fixture_assets
+import data.test.fixtures.iam_allowed_bindings.assets.resource_changes as fixture_assets
 import data.test.fixtures.iam_allowed_bindings.constraints as fixture_constraints
 
 # Test denylist project

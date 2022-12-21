@@ -96,6 +96,7 @@ spec:
         
         	# Use input.review for TF changes (see schema above)
         	resource := input.review
+        
         	resource.type == "google_project_iam_custom_role"
         	not resource.change.actions[0] == "delete"
         

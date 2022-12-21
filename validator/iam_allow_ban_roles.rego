@@ -44,12 +44,13 @@ violation[{
 	resource := input.review
 
 	resource.type == "google_project_iam_binding"
+
 	not resource.change.actions[0] == "delete"
 
 	# Get the role to be binded (ie. roles/resourcemanager.projectIamAdmin)
 	role := resource.change.after.role
 
-	matches_found = {r | r := role; glob.match(params.roles[_], [], r)}
+	matches_found = [r | r := config_pattern(role); glob.match(params.roles[_], [], r)]
 
 	mode := object.get(params, "mode", "allowlist")
 

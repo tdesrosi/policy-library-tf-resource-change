@@ -45,7 +45,6 @@ using the [Constraint Template Authoring Guide](./docs/constraint_template_autho
 make audit                          Run audit against real CAI dump data
 make build                          Format and build
 make build_templates                Inline Rego rules into constraint templates
-make debug                          Show debugging output from OPA
 make format                         Format Rego rules
 make help                           Prints help for targets with comments
 make test                           Test constraint templates via OPA
