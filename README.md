@@ -6,7 +6,13 @@ Everything in this repository has been developed as a parallel to CAI Config Val
 
 ## User Guide
 
-See [docs/user_guide.md](docs/user_guide.md) for information on how to use this library. **(NOTE: This is currently not up to date for this policy library.)**
+See [docs/user_guide.md](docs/user_guide.md) for information on how to use this library.
+
+See [docs/functional_principles.md](docs/functional_principles.md) for information on how to **develop** your own policies to use with `gcloud beta terraform vet`.
+
+## Creating Policies in the Constraint Framework
+
+This library is set up in the **Constraint Framework** style. This means that we utilize Gatekeeper Constraints and ConstraintTemplates to interpret and apply rego logic to incoming terraform change resources. This can be challenging to understand at first, so please refer to the [functional principles](docs/functional_principles.md) documentation found in the `docs` folder.
 
 ## General Differences
 
@@ -16,7 +22,7 @@ You can check out documentation on how to create terraform policies in the [`gcl
 
 ## Working with this policy library
 
-The operation of this library is similar with the CAI library, as the development flow with Make and other tools has proven to be quite efficient and helpful. Therefore, here is the relevant documentation required to get this library working for your needs.
+The operation of this library is similar with the CAI library, as the development flow with Make and other tools has proven to be quite efficient and helpful. Therefore, you can check the [user guide](docs/user_guide.md) for relevant documentation required to get this library working for your needs.
 
 ### Initializing a policy library
 
@@ -37,7 +43,7 @@ Once you have initialized a library, you might want to save it to [git](./docs/u
 ### Developing a Constraint
 
 If this library doesn't contain a constraint that matches your use case, you can develop a new one
-using the [Constraint Template Authoring Guide](./docs/constraint_template_authoring.md).
+using the [Constraint Template Authoring Guide](docs/functional_principles.md).
 
 #### Available Commands
 

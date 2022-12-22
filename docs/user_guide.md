@@ -9,7 +9,6 @@
   * [Get started with the Policy Library repository](#get-started-with-the-policy-library-repository)
   * [Instantiate constraints](#instantiate-constraints)
 * [How to validate policies](#how-to-validate-policies)
-* [How to Use Config Validator with Forseti](#how-to-use-config-validator-with-Forseti)
   * [Deploy Forseti](#deploy-forseti)
   * [Policy Library Sync from Git Repository](https://forsetisecurity.org/docs/latest/configure/config-validator/policy-library-sync-from-git-repo.html)
   * [Policy Library Sync from GCS](https://forsetisecurity.org/docs/latest/configure/config-validator/policy-library-sync-from-gcs.html)
@@ -91,9 +90,9 @@ Periodically you should pull any changes from the public repository, which might
 contain new templates and Rego files.
 
 ```
-git remote add public https://github.com/GoogleCloudPlatform/policy-library.git
-git pull public master
-git push origin master
+git remote add public https://github.com/tdesrosi/policy-library-tf-resource-change.git
+git pull public main
+git push origin main
 ```
 
 ### Instantiate constraints
@@ -104,7 +103,7 @@ order to enforce them. Constraint parameters are defined as YAML files in the
 following format:
 
 ```
-apiVersion: constraints.gatekeeper.sh/v1alpha1
+apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: # place constraint template kind here
 metadata:
   name: # place constraint name here
@@ -199,8 +198,8 @@ The are exempt from the constraint since they are allowlisted.
 Here is a complete example of a sample external IP address constraint file:
 
 ```
-apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPExternalIpAccessConstraintV1
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: TFGCPExternalIpAccessConstraintV1
 metadata:
   name: forbid-external-ip-allowlist
 spec:
@@ -219,58 +218,36 @@ spec:
 Follow the [instructions](https://cloud.google.com/docs/terraform/policy-validation/validate-policies)
 to validate policies in your local or production environments.
 
-## How to Use Config Validator with Forseti
-
-### Deploy Forseti
-
-Follow the [documentation on the Forseti Security website](https://forsetisecurity.org/docs/latest/setup/install/index.html)
-to deploy Forseti on GCE. As part of the Terraform configuration, you will need to enable
-Config Validator. Follow the [documentation on the Forseti Security website](https://forsetisecurity.org/docs/latest/configure/config-validator/index.html)
-to set up Config Validator.
-
-#### Provide Policies to Forseti Server
-
-The recommended practice is to store the Policy Library in a VCS such as GitHub
-or other git repository. This supports the idea of policy as code and requires
-work to setup the repository and connect it with Forseti. Once the repository is
-setup, then Forseti will automatically
-[sync](https://github.com/kubernetes/git-sync) policy updates to the Forseti
-Server to be used by future scans.
-
-The default behavior of Forseti is to sync the Policy Library from the Forseti
-Server GCS bucket. This requires little setup, but involves manual work to
-create the folder and copy the policies to GCS.
-
-Follow the documentation on the Forseti Security website to sync policies
-from the [GCS to the Forseti server](https://forsetisecurity.org/docs/latest/configure/config-validator/policy-library-sync-from-gcs.html), and from [Git Repository to the Forseti server](https://forsetisecurity.org/docs/latest/configure/config-validator/policy-library-sync-from-git-repo.html).
-
 ## End to end workflow with sample constraint
 
 In this section, you will apply a constraint that enforces IAM policy member
 domain restriction using [Cloud Shell](https://cloud.google.com/shell/).
 
 First click on this
-[link](https://console.cloud.google.com/cloudshell/open?cloudshell_image=gcr.io/graphite-cloud-shell-images/terraform:latest&cloudshell_git_repo=https://github.com/GoogleCloudPlatform/policy-library.git)
+[link](https://console.cloud.google.com/cloudshell/open?cloudshell_image=gcr.io/graphite-cloud-shell-images/terraform:latest&cloudshell_git_repo=https://github.com/tdesrosi/policy-tf-resource-change.git)
 to open a new Cloud Shell session. The Cloud Shell session has Terraform
 pre-installed and the Policy Library repository cloned. Once you have the
 session open, the next step is to copy over the sample IAM domain restriction
 constraint:
 
 ```
-cp samples/iam_service_accounts_only.yaml policies/constraints
+cp samples/constraints/iam_service_accounts_only.yaml policies/constraints
 ```
 
 Let's take a look at this constraint:
 
 ```
-apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPIAMAllowedPolicyMemberDomainsConstraintV1
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: TFGCPIAMAllowedPolicyMemberDomainsConstraintV2
 metadata:
-  name: service_accounts_only
+  name: service-accounts-only
+  annotations:
+    description:
+      Checks that members that have been granted IAM roles belong to allowlisted
+      domains. Block IAM role bindings for non-service accounts by domain
+      (gserviceaccount.com)
 spec:
   severity: high
-  match:
-    target: ["organizations/**"]
   parameters:
     domains:
       - gserviceaccount.com
@@ -329,18 +306,21 @@ constraint to make the violation go away. Edit the
 append your email domain to the domains allowlist:
 
 ```
-apiVersion: constraints.gatekeeper.sh/v1alpha1
-kind: GCPIAMAllowedPolicyMemberDomainsConstraintV1
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: TFGCPIAMAllowedPolicyMemberDomainsConstraintV2
 metadata:
-  name: service_accounts_only
+  name: service-accounts-only
+  annotations:
+    description:
+      Checks that members that have been granted IAM roles belong to allowlisted
+      domains. Block IAM role bindings for non-service accounts by domain
+      (gserviceaccount.com)
 spec:
   severity: high
-  match:
-    target: ["organizations/**"]
   parameters:
     domains:
       - gserviceaccount.com
-      - your-domain-here
+      - your-email-domain.com
 ```
 
 Then run Terraform plan and validate the output again:

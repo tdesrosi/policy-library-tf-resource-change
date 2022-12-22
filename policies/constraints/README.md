@@ -1,6 +1,6 @@
 # What to put here
 
-This directory should contain the constraint .yaml files used in your environment. Unfortunately, there is no library for terraform resource change policies available that I know of. You can use the samples in this repository, which are located in the samples folder.
+This directory should contain the constraint .yaml files used in your environment. You can use the samples in this repository, which are located in the samples folder, or create your own by following the instructions in [docs/functional_principles.md](../../docs/functional_principles.md)
 
 ## Contributing
 
